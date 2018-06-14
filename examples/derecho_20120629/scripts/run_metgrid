@@ -1,0 +1,18 @@
+#!/bin/bash
+
+COMPONENT=metgrid
+
+cd /WPSRUN
+ln -sf /wrf/WPS/${COMPONENT}.exe .
+
+# Command for COMPONENT
+./${COMPONENT}.exe >& print.${COMPONENT}.txt
+ls -ls FILE:*
+OK_step=$?
+
+if [ $OK_step -eq 0 ]; then
+    tail print.${COMPONENT}.txt
+else
+    echo ${COMPONENT} FAILED
+    exit 444
+fi

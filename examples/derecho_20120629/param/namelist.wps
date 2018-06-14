@@ -1,0 +1,40 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 2,
+ start_date = '2012-06-29_12:00:00','2012-06-29_12:00:00',
+ end_date   = '2012-06-30_12:00:00','2012-06-30_12:00:00',
+ interval_seconds = 10800
+ io_form_geogrid = 2,
+/
+
+&geogrid
+ parent_id         =   1,   1,
+ parent_grid_ratio =   1,   4,
+ i_parent_start    =   1,  55,
+ j_parent_start    =   1,  20,
+ e_we              = 101, 49,
+ e_sn              = 76,  49,
+ geog_data_res     = '2deg+gtopo_10m+usgs_10m+10m+nesdis_greenfrac', '2deg+gtopo_10m+usgs_10m+10m+nesdis_greenfrac'
+ dx = 12000,
+ dy = 12000,
+ map_proj = 'lambert',
+ ref_lat   =  40.60
+ ref_lon   = -84.90
+ truelat1  =  39.60,
+ truelat2  =  40.60,
+ stand_lon = -84.90,
+ geog_data_path = '/WPSRUN/',
+ opt_geogrid_tbl_path = '/wrf/WPS/geogrid',
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+ io_form_metgrid = 2, 
+ opt_metgrid_tbl_path = '/wrf/WPS/metgrid',
+/
+
