@@ -16,36 +16,35 @@ ENV CMODE ${CMODE:-32}
 ENV NEST  ${NEST:-0}
 
 WORKDIR /wrf
-#
-# Download original sources
-#
-RUN curl -SL http://www2.mmm.ucar.edu/wrf/src/WRFV${WRF_VERSION}.TAR.gz | tar zxC /wrf
 
-# FIXME this can be probably merged in appropriate links commands in the RUN below.
-RUN echo export LDFLAGS="-lm" >> /etc/bashrc \
- && echo export NETCDF=/wrf/netcdf_links >> /etc/bashrc \
- && echo export JASPERINC=/usr/include/jasper/ >> /etc/bashrc \
- && echo export JASPERLIB=/usr/lib64/ >> /etc/bashrc \
- && echo export LD_LIBRARY_PATH="/usr/lib64/openmpi/lib" >> /etc/bashrc \
- && echo export PATH="/usr/lib64/openmpi/bin:$PATH" >> /etc/bashrc
-
-RUN pwd \ 
- && mkdir netcdf_links \
- && ln -sf /usr/include/openmpi-x86_64/ netcdf_links/include \
- && ln -sf /usr/lib64/openmpi/lib netcdf_links/lib \
+RUN mkdir netcdf_links \
+ && if [ "$CMODE" = "32" ]; then \
+    ln -sf /usr/include/ netcdf_links/include \
+    && ln -sf /usr/lib64 netcdf_links/lib \
+    && ln -sf /usr/lib64/gfortran/modules/netcdf.mod netcdf_links/include \
+    ; else \
+    yum -y install \
+           netcdf-openmpi-devel.x86_64 \
+           netcdf-fortran-openmpi-devel.x86_64 \
+           netcdf-fortran-openmpi.x86_64 \
+           hdf5-openmpi.x86_64 \
+           openmpi.x86_64 openmpi-devel.x86_64 \
+           openssh-clients openssh-server net-tools \
+    && yum clean all && rm -rf /var/cache/yum \
+    && ln -sf /usr/include/openmpi-x86_64/ netcdf_links/include \
+    && ln -sf /usr/lib64/openmpi/lib netcdf_links/lib \
+    && export LD_LIBRARY_PATH="/usr/lib64/openmpi/lib" \
+    && export PATH="/usr/lib64/openmpi/bin:$PATH" \
+    ; fi \
  && export NETCDF=/wrf/netcdf_links \
  && export JASPERINC=/usr/include/jasper/ \
  && export JASPERLIB=/usr/lib64/ \
  && cd ./WRFV3 \
  && printf "${CMODE}\n${NEST}" |./configure \
  && sed -i -e '/^DM_CC/ s/$/ -DMPI2_SUPPORT/' ./configure.wrf \
- && /bin/csh ./compile em_real > compile_wrf_arw_opt34.1.log 2>&1
-
-
-RUN if [ "$CMODE" != "32" ]; then \
-    yum install -y openssh-clients openssh-server net-tools \
-    && yum clean all \
-    && mkdir -p /var/run/sshd \
+ && /bin/csh ./compile em_real > compile_wrf_arw_opt${CMODE}.${NEST}.log 2>&1 \
+ && if [ "$CMODE" != "32" ]; then \
+    mkdir -p /var/run/sshd \
     && ssh-keygen -A \
     && sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config \
@@ -57,11 +56,4 @@ RUN if [ "$CMODE" != "32" ]; then \
     && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
     && echo -e "#"'!'"/bin/bash\n/usr/sbin/sshd -D" > /wrf/slave \
     && chmod +x /wrf/slave \
-    && true ; fi
-
-# RUN cd WRFV3 \
-#     && rm -f README* Makefile clean compile configure configure.wrf \
-#     && rm -rf Registry arch dyn_em dyn_exp dyn_nmm external frame \
-#        hydro inc phys share test tools \
-#     && cd main \
-#        rm -f *.F *.f90 *.o *.mod *.a *.c Makefile depend.common 
+    ; fi
