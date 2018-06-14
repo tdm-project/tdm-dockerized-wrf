@@ -1,18 +1,19 @@
 ARG BASE_VERSION=latest
 FROM crs4/tdm-wrf-base:$BASE_VERSION
 LABEL maintainer="Gianluigi Zanetti <zag@crs4.it>"
-# Based on Jamie Wolff <jwolff@ucar.edu> adn Michelle Harrold <harrold@ucar.edu> wps_wrf_upp Dockerfile
+# Based on the wps_wrf_upp Dockerfile
+# of Jamie Wolff <jwolff@ucar.edu> and Michelle Harrold <harrold@ucar.edu> 
 
 ARG WRF_VERSION
 # GNU (gfortran/gcc) options
 # CMODE=32 serial, CMODE=33 DMPAR,  CMODE=34 SMPAR, CMODE=35 DMPAR + SMPAR
-# input 1 to WRF to select nested
+# NEST=0 plain, NEST=1 nested, ...
 ARG CMODE
 ARG NEST
 
 ENV WRF_VERSION ${WRF_VERSION:-3.9.1.1}
 ENV CMODE ${CMODE:-32}
-ENV NEST  ${NEST:-1}
+ENV NEST  ${NEST:-0}
 
 WORKDIR /wrf
 #
@@ -26,13 +27,7 @@ RUN echo export LDFLAGS="-lm" >> /etc/bashrc \
  && echo export JASPERINC=/usr/include/jasper/ >> /etc/bashrc \
  && echo export JASPERLIB=/usr/lib64/ >> /etc/bashrc \
  && echo export LD_LIBRARY_PATH="/usr/lib64/openmpi/lib" >> /etc/bashrc \
- && echo export PATH="/usr/lib64/openmpi/bin:$PATH" >> /etc/bashrc \
- && echo setenv LDFLAGS "-lm" >> /etc/csh.cshrc \
- && echo setenv NETCDF "/wrf/netcdf_links" >> /etc/csh.cshrc \
- && echo setenv JASPERINC "/usr/include/jasper/" >> /etc/csh.cshrc \
- && echo setenv JASPERLIB "/usr/lib64/" >> /etc/csh.cshrc \
- && echo setenv LD_LIBRARY_PATH "/usr/lib64/openmpi/lib" >> /etc/csh.cshrc \
- && echo setenv PATH "/usr/lib64/openmpi/bin:$PATH" >> /etc/csh.cshrc
+ && echo export PATH="/usr/lib64/openmpi/bin:$PATH" >> /etc/bashrc
 
 RUN pwd \ 
  && mkdir netcdf_links \
@@ -46,6 +41,23 @@ RUN pwd \
  && sed -i -e '/^DM_CC/ s/$/ -DMPI2_SUPPORT/' ./configure.wrf \
  && /bin/csh ./compile em_real > compile_wrf_arw_opt34.1.log 2>&1
 
+
+RUN if [ "$CMODE" != "32" ]; then \
+    yum install -y openssh-clients openssh-server net-tools \
+    && yum clean all \
+    && mkdir -p /var/run/sshd \
+    && ssh-keygen -A \
+    && sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config \
+    && sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config \
+    && sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config \
+    && ssh-keygen -f /root/.ssh/id_rsa -t rsa -N '' \
+    && echo "StrictHostKeyChecking no" > /root/.ssh/config \
+    && chmod 600 /root/.ssh/config \
+    && chmod 700 /root/.ssh \
+    && cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys \
+    && echo -e "#"'!'"/bin/bash\n/usr/sbin/sshd -D" > /wrf/slave \
+    && chmod +x /wrf/slave \
+    && true ; fi
 
 # RUN cd WRFV3 \
 #     && rm -f README* Makefile clean compile configure configure.wrf \
