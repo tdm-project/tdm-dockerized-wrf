@@ -14,8 +14,8 @@ RUN curl -SL http://www2.mmm.ucar.edu/wrf/src/WPSV$WPS_VERSION.TAR.gz | tar zxC 
  && export JASPERLIB=/usr/lib64/ \
  && ./configure <<< $'1\r' \
  && sed -i -e 's/-L$(NETCDF)\/lib/-L$(NETCDF)\/lib -lnetcdff /' ./configure.wps \
- && /bin/csh ./compile > compile_wps.log 2>&1
+ && /bin/csh ./compile > compile_wps.log 2>&1 \
+ && mkdir /WPSRUN
 
 ENV LD_LIBRARY_PATH /usr/lib64/lib
 ENV PATH  /usr/lib64/bin:$PATH
-
