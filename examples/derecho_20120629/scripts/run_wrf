@@ -51,8 +51,8 @@ do
 done
 ln -sf /wrf/WRFV3/run/wrf.exe .
 
-export OMP_GET_MAX_THREADS=${NCORES}
-time mpirun --allow-run-as-root -x OMP_GET_MAX_THREADS \
+export OMP_NUM_THREADS=${NCORES}
+time mpirun --allow-run-as-root -x OMP_NUM_THREADS \
      --hostfile ${HOSTS} -np ${NPROCS} \
      -v --display-map --mca btl self,tcp ./wrf.exe
 #     --mca btl self,tcp --mca btl_tcp_if_include $iface ./wrf.exe
