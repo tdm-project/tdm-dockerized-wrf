@@ -16,4 +16,4 @@ EOF
 INLIST=namelist.input.numtiles
 sed -e "s/NUMTILES/${NUMTILES}/" < ${PARAM}/${INLIST} > ${WPSPRD_DIR}/namelist.input
 docker run -it --mount type=bind,src=${PWD}/${WPSPRD_DIR},dst=/WPSRUN \
-           crs4/tdm-wrf-arw:0.1 /WPSRUN/run_wrf ${NUMPROC} /WPSRUN/hosts
+           crs4/tdm-wrf-arw:0.1 /WPSRUN/run_wrf ${NUMPROC} ${NUMTILES} /WPSRUN/hosts

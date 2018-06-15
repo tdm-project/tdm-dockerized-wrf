@@ -1,6 +1,7 @@
 #!/bin/bash
 NPROCS=$1
-HOSTS=$2
+NCORES=$2
+HOSTS=$3
 
 RUN_DETAILS_FILES="
 aerosol.formatted aerosol_lat.formatted aerosol_lon.formatted aerosol_plev.formatted
@@ -50,7 +51,8 @@ do
 done
 ln -sf /wrf/WRFV3/run/wrf.exe .
 
-time mpirun --allow-run-as-root --hostfile ${HOSTS} -np ${NPROCS} \
+time mpirun --allow-run-as-root -x OMP_GET_MAX_THREADS=${NCORES}\
+     --hostfile ${HOSTS} -np ${NPROCS} \
      -v --display-map --mca btl self,tcp ./wrf.exe
 #     --mca btl self,tcp --mca btl_tcp_if_include $iface ./wrf.exe
 
