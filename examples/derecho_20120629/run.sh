@@ -3,6 +3,9 @@
 set -euo pipefail
 
 WPSPRD_DIR=${1:-WPSPRD_DIR}
+NUMPROC=${2:-2}
+NUMTILES=${3:-1}
+
 PARAM=param
 SCRIPTS=scripts
 
@@ -10,5 +13,7 @@ cp ${SCRIPTS}/run_wrf ${WPSPRD_DIR}
 cat >${WPSPRD_DIR}/hosts <<EOF
 127.0.0.1 4
 EOF
+NAMELIST=namelist.input
+sed -e "s/NUMTILES/${NUMTILES}/" < ${PARAM}/${NAMELIST} > ${WPSPRD_DIR}/${NAMELIST}
 docker run -it --mount type=bind,src=${PWD}/${WPSPRD_DIR},dst=/WPSRUN \
-           crs4/tdm-wrf-arw:0.1 /WPSRUN/run_wrf 2 /WPSRUN/hosts
+           crs4/tdm-wrf-arw:0.1 /WPSRUN/run_wrf ${NUMPROC} /WPSRUN/hosts
