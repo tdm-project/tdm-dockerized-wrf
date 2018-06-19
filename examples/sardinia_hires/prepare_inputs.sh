@@ -15,9 +15,11 @@ function get_if_missing {
     fi
 }
 
+# This is the V3 geog file
 UCAR_PATH="http://www2.mmm.ucar.edu/wrf/src/wps_files"
-GEOG_TGZ="geog_high_res_mandatory.tar.gz"
+GEOG_TGZ="geog_complete.tar.gz"
 GEOG_URL="${UCAR_PATH}/${GEOG_TGZ}"
+
 
 MODEL_DATA_DIR=./model_data
 
