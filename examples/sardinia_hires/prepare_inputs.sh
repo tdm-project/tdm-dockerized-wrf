@@ -17,7 +17,7 @@ function get_if_missing {
 
 UCAR_PATH="http://www2.mmm.ucar.edu/wrf/src/wps_files"
 GEOG_TGZ="geog_high_res_mandatory.tar.gz"
-GEOG_URL="${DT_CENTER_PATH}/${GEOG_TGZ}"
+GEOG_URL="${UCAR_PATH}/${GEOG_TGZ}"
 
 MODEL_DATA_DIR=./model_data
 
