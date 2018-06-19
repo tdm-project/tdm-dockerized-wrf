@@ -49,7 +49,7 @@ class noaa_fetcher(object):
             ftp.cwd(ds_path)
             cmd = 'RETR %s' % fname
             ftp.retrbinary(cmd,
-                           open(os.path.jooin(tdir, fname), 'wb').write,
+                           open(os.path.join(tdir, fname), 'wb').write,
                            blocksize=1024*1024)
         return os.path.join(tdir, fname)
 
