@@ -28,7 +28,7 @@
  truelat1  =  38.00,
  truelat2  =  42.00,
  stand_lon =   9.00,
- geog_data_path = '/WPSRUN/',
+ geog_data_path = '/WPSRUN/WPS_GEOG',
  opt_geogrid_tbl_path = '/wrf/WPS/geogrid',
 /
 
