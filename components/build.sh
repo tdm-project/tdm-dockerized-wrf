@@ -13,3 +13,6 @@ docker build --build-arg BASE_VERSION=${BASE_VERSION} \
              --build-arg CMODE=35 --build-arg NEST=1 \
              -t crs4/tdm-wrf-arw:${BASE_VERSION} arw
 
+docker build -t crs4/tdm-wrf-analyze:${BASE_VERSION} analyze
+
+docker build -t crs4/tdm-wrf-gfs-fetch:${BASE_VERSION} gfs_fetch
