@@ -40,12 +40,13 @@
  time_step_fract_num                 = 0,
  time_step_fract_den                 = 1,
  max_dom                             = 2,
+ e_vert                              = 51,  51,
  e_we                                = 101,  91,
  e_sn                                = 201,  181,
  num_metgrid_levels                  = 48,
  num_metgrid_soil_levels             = 4,
- dx                                  = 10000
- dy                                  = 10000
+ dx                                  = 10000, 3333.333
+ dy                                  = 10000, 3333.333
  grid_id                             = 1, 2,
  parent_id                           = 1, 1,
  i_parent_start                      = 1, 25,
