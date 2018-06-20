@@ -11,7 +11,7 @@
  max_dom = 2,
  start_date = '2018-06-18_00:00:00','2018-06-18_00:00:00',
  end_date   = '2018-06-18_06:00:00','2018-06-18_06:00:00',
- interval_seconds = 10600
+ interval_seconds = 10800
  io_form_geogrid = 2,
 /
 
