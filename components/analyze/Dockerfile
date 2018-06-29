@@ -6,11 +6,13 @@ FROM continuumio/anaconda3
 
 RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
- && /opt/conda/bin/conda install -c conda-forge wrf-python pygrib -y \
+ && /opt/conda/bin/conda install -c conda-forge wrf-python -y \
  && /opt/conda/bin/conda install jupyter -y \
  && /opt/conda/bin/conda install \
     numpy pandas scikit-learn matplotlib \
     seaborn pyyaml -y \
  && /opt/conda/bin/conda install cartopy -y \
+ && /opt/conda/bin/conda install -c conda-forge pygrib -y \ 
+ && /opt/conda/bin/conda install gdal -y \ 
  && /opt/conda/bin/conda upgrade dask -y \
  && mkdir /WPSRUN
