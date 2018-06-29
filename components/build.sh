@@ -15,4 +15,4 @@ docker build --build-arg BASE_VERSION=${BASE_VERSION} \
 
 docker build -t crs4/tdm-wrf-analyze:${BASE_VERSION} analyze
 
-docker build -t crs4/tdm-wrf-gfs-fetch:${BASE_VERSION} gfs_fetch
+docker build -t crs4/tdm-wrf-tools:${BASE_VERSION} tools
