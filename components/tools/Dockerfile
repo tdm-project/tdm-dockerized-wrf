@@ -7,4 +7,4 @@ RUN git clone https://github.com/tdm-project/tdm-tools.git \
     && git checkout develop \
     && python setup.py install
 
-CMD ["/usr/local/bin/gfs_fetch"]
+
