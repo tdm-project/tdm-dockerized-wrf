@@ -1,64 +1,41 @@
-# descriptions:
-# actions:
-# https://esrl.noaa.gov/gsd/wrfportal/namelist_input_options.html
-description:
+# Minimalistic configuration example
+global:
   geometry:
-    global:
+    ref_lat: 40.21
+    ref_lon:  9.00
+    truelat1: 38.00
+    truelat2: 42.00
+    stand_lon: 9.00
+    map_proj: 'lambert'
+    geog_data_res: 'default'
+  running:
+    input:
+      interval_seconds: 10800
+    
+domains:
+  base:
+    geometry:
       dx: 12000
       dy: 12000
-      map_proj: 'lambert'
-      ref_lat:  40.21
-      ref_lon:   9.00
-      truelat:
-        - 38.00
-        - 42.00
-      stand_lon: 9.00
-      geog_data_res: 'default'
-    domains:
-      base:
-        west_east: 101
-        south_north: 201
-      dom1:
-        parent: base
-        parent_grid_ration: 3
-        south_west_corner: 25, 51
-        west_east: 91 # these are 30 coarse grid steps -> i-> {25, 55}
-        south_north: 181 # these are 60 coarse grid steps -> i-> {51, 111}
-  conversions:
-    ungrib:parent_grid_ratio 
-      out_format: 'WPS'
-      prefix: 'FILE'
-  timespans:
-    domains:
-      base:
-        start:
-          year: 2018
-          month: 6
-          day: 18 
-          hour: 0
-          minute: 0
-          second: 0
-        end:
-          year: 2018
-          month: 6
-          day: 18 
-          hour: 6
-          minute: 0
-          second: 0
-  running:
-    debug:
-      level: 0
-    input:
-      restart: false
-      interval_seconds: 10600
-      domains:
-        base:
-          from_file: true
-    history:
-      conf:
-        outname: "/WPSRUN/wrfout_d<domain>_<date>.nc"
-      domains:
-        base:
-          interval: 60 # mins
-          frames_per_outfile: 1 # this is actually a noop
-
+      e_we: 101
+      e_sn: 201
+    timespan:
+      start:
+        year: 2018
+        month: 6
+        day: 18 
+        hour: 0
+      end:
+        year: 2018
+        month: 6
+        day: 18 
+        hour: 6
+  # a nested domain
+  sardinia:
+    parent: base
+    geometry:
+      parent_grid_ratio: 3
+      i_parent_start: 25
+      j_parent_start: 51
+      e_we: 91 # these are 30 coarse grid steps -> i-> {25, 55}
+      e_sn: 181 # these are 60 coarse grid steps -> i-> {51, 111}
