@@ -27,5 +27,7 @@ RUN pwd \
  && /bin/csh ./compile > compile_wps.log 2>&1
 
 
+COPY run_geogrid run_ungrib run_metgrid /usr/bin/
+
 ENV LD_LIBRARY_PATH /usr/lib64/lib
 ENV PATH  /usr/lib64/bin:$PATH

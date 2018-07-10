@@ -57,3 +57,5 @@ RUN mkdir netcdf_links \
     && echo -e "#"'!'"/bin/bash\n/usr/sbin/sshd -D" > /wrf/slave \
     && chmod +x /wrf/slave \
     ; fi
+
+COPY run_wrf run_real /usr/bin/
