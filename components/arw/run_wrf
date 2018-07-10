@@ -1,7 +1,8 @@
 #!/bin/bash
-NPROCS=$1
-NCORES=$2
-HOSTS=$3
+RUNDIR=$1
+NPROCS=$2
+NCORES=$3
+HOSTS=$4
 
 RUN_DETAILS_FILES="
 aerosol.formatted aerosol_lat.formatted aerosol_lon.formatted aerosol_plev.formatted
@@ -43,7 +44,7 @@ COMPONENT=wrf
 # start ssh
 /usr/sbin/sshd
 
-cd /WPSRUN
+cd ${RUNDIR}
 for f in ${RUN_DETAILS_FILES}
 do
     rm -rf ./$f
