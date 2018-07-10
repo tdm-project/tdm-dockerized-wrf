@@ -1,30 +1,18 @@
 How to run an example
 =====================
 
-
-All examples subfolders contain
-
- * a script called `prepare_inputs.sh` that will prepare all it is
-   needed to run the specific example;
- * a script called `run.sh` that will run the actual simulation;
- * the default behaviour is to write everything inside a single directory,
-   default name `WPSPRD_DIR`, the specific datasets are downloaded as needed;
- * <something to look at the results>
-
-Thus running a specific example entails:
-
- * FIXME give details on how to create and run the example
-   
 The general strategy is that all the needed computational steps -- e.g.,
 extracting boundary conditions from grib files -- are encapsulated in stateless
 docker containers.
 
 
-
 Fully parametrized example
 --------------------------
 
-The expected operation streams should be the following.
+Run initialization
+..................
+
+The expected operation sequence is the following.
 
  #. Prepare the run configuration file
 
@@ -132,6 +120,60 @@ The expected operation streams should be the following.
            crs4/tdm-wrf-arw:0.1 run_real /run
 
 
+Running a run
+.............
+
+ #. Constants
+
+    .. code-block:: bash
+    $ NUMPROC=2
+    $ NUMTILES=4
+    $ NUMSLOTS=4
+    
+
+ #. Setting up run parameters.
+
+    .. code-block:: bash
+                    
+       $ docker run --rm\
+           --mount src=${RUNID},dst=/run\
+           crs4/tdm-wrf-tools:0.1 wrf_configurator --target WRF\
+           --config /run/wrf.yaml --ofile=/run/namelist.input\
+           -D"geometry.geog_data_path=/geo/"\           
+           -D"@base.timespan.start.year=${YEAR}"\
+           -D"@base.timespan.start.month=${MONTH}"\
+           -D"@base.timespan.start.day=${DAY}"\
+           -D"@base.timespan.start.hour=${HOUR}"\
+           -D"@base.timespan.end.year=${YEAR}"\
+           -D"@base.timespan.end.month=${MONTH}"\
+           -D"@base.timespan.end.day=${DAY}"\
+           -D"@base.timespan.end.hour=${END_HOUR}"\
+           -D"running.parallel.numtiles=${NUMTILES}"
+
+ #. Setting up mpi hosts file
+
+    .. code-block:: bash
+
+       $ cat > hosts <<EOF
+         127.0.0.1 4
+         EOF
+       $ docker run --rm\
+            --mount src=${RUNID},dst=/run\
+            --mount type=bind,src=${PWD},dst=/src\
+            alpine cp /src/hosts /run/hosts
+
+ #. Running!
+
+    .. code-block:: bash
+
+       $ docker run -it --rm\
+            --mount src=${RUNID},dst=/run\       
+           crs4/tdm-wrf-arw:0.1 run_wrf /run ${NUMPROC} ${NUMTILES} /run/hosts
+
+
+
+
+           
 Data analysis
 -------------
    
