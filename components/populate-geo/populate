@@ -1,0 +1,15 @@
+#!/bin/bash
+
+GEOG_NAME=$1
+WPSGEOG=$2
+GEOG_TGZ=${GEOG_NAME}.tar.gz
+UCAR_PATH="http://www2.mmm.ucar.edu/wrf/src/wps_files"
+GEOG_URL="${UCAR_PATH}/${GEOG_TGZ}"
+
+echo "Downloading ${GEOG_URL}"
+curl -SL ${GEOG_URL} | tar -xzC ${WPSGEOG}
+# fix a problem with geog_complete
+if [ -d ${WPSGEOG}/${GEOG_NAME} ]; then
+   mv ${WPSGEOG}/${GEOG_NAME}/* ${WPSGEOG}/
+   rm -rf ${WPSGEOG}/${GEOG_NAME}
+fi

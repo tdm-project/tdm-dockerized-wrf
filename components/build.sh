@@ -4,6 +4,8 @@ set -euo pipefail
 
 BASE_VERSION=0.1
 
+docker build -t crs4/tdm-wrf-populate-geo:${BASE_VERSION} populate-geo
+
 docker build -t crs4/tdm-wrf-base:${BASE_VERSION} base
 
 docker build --build-arg BASE_VERSION=${BASE_VERSION} \
