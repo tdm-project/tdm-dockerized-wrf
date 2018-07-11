@@ -10,10 +10,14 @@ GEOG_URL="${UCAR_PATH}/${GEOG_TGZ}"
 
 echo "Downloading ${GEOG_URL}"
 curl -SL ${GEOG_URL} | tar -xzC ${WPSGEOG}
-# fix a problem with geog_complete
-if [ -d ${WPSGEOG}/${GEOG_NAME} ]; then
-   mv ${WPSGEOG}/${GEOG_NAME}/* ${WPSGEOG}/
-   rm -rf ${WPSGEOG}/${GEOG_NAME}
+
+# fix a problem with nonstandard geog files
+fname=`find ${WPSGEOG} -name islope`
+dname=`dirname $fname`
+if [ $dname != ${GEOG_NAME} ]; then
+    mv ${dname}/* ${WPSGEOG}/
+    # assume that we are at most 1 deep
+    rm -rf ${dname}
 fi
 # add a semaphore file
 touch ${WPSGEOG}/.__success__
