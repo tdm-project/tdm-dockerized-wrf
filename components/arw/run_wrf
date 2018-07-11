@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -euo pipefail
+
 RUNDIR=$1
 NPROCS=$2
 NCORES=$3
