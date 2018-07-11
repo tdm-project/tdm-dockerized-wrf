@@ -8,7 +8,7 @@ global:
     truelat1: 38.00
     truelat2: 42.00
     stand_lon: 9.00
-    geog_data_path: '/WPSRUN/'
+    geog_data_path: '/geo/'
 
   real:
     # number of vertical levels in WPS
@@ -30,7 +30,7 @@ global:
 domains:
   base:
     geometry:
-      geog_data_res: 'gtopo_2m+usgs_2m+nesdis_greenfrac+2m'
+      geog_data_res: '30s'
       dx: 1200
       dy: 1200
       e_we: 501
