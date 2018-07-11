@@ -14,7 +14,7 @@ function check_if_not_present () {
 source ./param/run.cfg
 
 
-if check_if_not_present geog_minimum ; then 
+if check_if_not_present ${GEOG_NAME} ; then 
     docker run --rm --mount source=${GEOG_NAME},destination=/geo \
            crs4/tdm-wrf-populate-geo:0.1 ${GEOG_NAME} /geo
 fi
