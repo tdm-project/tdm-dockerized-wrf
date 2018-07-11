@@ -15,4 +15,6 @@ if [ -d ${WPSGEOG}/${GEOG_NAME} ]; then
    mv ${WPSGEOG}/${GEOG_NAME}/* ${WPSGEOG}/
    rm -rf ${WPSGEOG}/${GEOG_NAME}
 fi
+# add a semaphore file
+touch ${WPSGEOG}/.__success__
 
