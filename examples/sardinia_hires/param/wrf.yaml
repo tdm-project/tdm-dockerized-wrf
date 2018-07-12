@@ -25,7 +25,7 @@ global:
 
   physics:
     num_soil_layers: 4
-    num_land_cat: 24
+    num_land_cat: 21
     
 domains:
   base:
