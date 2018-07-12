@@ -7,7 +7,7 @@ global:
     truelat2: 42.00
     stand_lon: 9.00
     map_proj: 'lambert'
-    geog_data_path: '/WPSRUN/'
+    geog_data_path: '/geo/'
 
   real:
     # number of vertical levels in WPS
@@ -24,7 +24,7 @@ global:
 
   physics:
     num_soil_layers: 4
-    num_land_cat: 24
+    num_land_cat: 21
     
 domains:
   base:
