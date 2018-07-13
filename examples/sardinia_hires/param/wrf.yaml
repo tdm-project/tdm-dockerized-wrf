@@ -21,7 +21,7 @@ global:
   running:
     input:
       interval_seconds: 10800
-    time_step: 6.0
+    time_step: 25.0
 
   physics:
     num_soil_layers: 4
